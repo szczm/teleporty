@@ -1,0 +1,30 @@
+{
+
+  "manifest_version": 2,
+  "name": "Teleporty",
+  "version": "1.0.0",
+
+  "applications": {
+    "gecko": {
+      "id": "teleporty@szczm"
+    }
+  },
+
+  "description": "Teleports to the current/most recent audible tab",
+
+  "background": {
+    "scripts": ["teleporty.js"]
+  },
+
+  "permissions": [
+    "tabs"
+  ],
+
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": {
+      "16": "icons/teleporty-16.png",
+      "32": "icons/teleporty-32.png"
+    }
+  }
+}
