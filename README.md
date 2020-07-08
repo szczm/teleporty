@@ -1,4 +1,4 @@
-# Teleporty
+# ![Teleporty icon](https://raw.githubusercontent.com/szczm/teleporty/master/icons/teleporty-active-32.png) Teleporty 
 
 This ad-don adds a but-ton that teleports you to the current (or most recent) audible tab. That is, if it's still alive and doing well. Hope you took good care of it.
 
