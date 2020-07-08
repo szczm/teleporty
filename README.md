@@ -2,11 +2,17 @@
 
 This ad-don adds a but-ton that teleports you to the current (or most recent) audible tab. That is, if it's still alive and doing well. Hope you took good care of it.
 
+### How to use:
+Click once on the teleport icon. If it's yellow, you're in the audible tab. If it's not, you're lost. Clicking when it's yellow makes you lost. Clicking when it's not allows you to find your inner currently playing tab.
+
 ### How to build:
 Default procedure, best done using `web-ext`.
 
-### How to install
-Double click the `.xpi` file I guess? 🤷
+### How to install:
+Open the `teleporty-1.1.0-fx.xpi` file I guess? 🤷
+
+### Limitations:
+Works best for one window. I haven't checked for two tabs, but if you have two tabs playing concurrently, you're a maniac and you should get checked.
 
 ### Changelog
 #### 1.1.0:
