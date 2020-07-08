@@ -8,6 +8,13 @@ Default procedure, best done using `web-ext`.
 ### How to install
 Double click the `.xpi` file I guess? 🤷
 
+### Changelog
+#### 1.1.0:
+- Added "return to previous tab" functionality
+- Improved UX
+- Updated icons
+#### 1.0.0:
+- Initial release.
 
 ### Credits
 Icon made by SmashIcons from www.flaticon.com (https://www.flaticon.com/free-icon/portal_2834596)
