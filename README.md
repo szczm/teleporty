@@ -12,7 +12,7 @@ Default procedure, best done using `web-ext`.
 Open the `teleporty-1.1.0-fx.xpi` file I guess? 🤷
 
 ### Limitations:
-Works best for one window. I haven't checked for two tabs, but if you have two tabs playing concurrently, you're a maniac and you should get checked.
+Works best for one playing tab. I haven't checked for two, but if you have two tabs playing concurrently, you're a maniac and you should get checked.
 
 ### Changelog
 #### 1.1.0:
