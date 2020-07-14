@@ -9,7 +9,7 @@ Click once on the teleport icon. If it's yellow, you're in the audible tab. If i
 Default procedure, best done using `web-ext`.
 
 ### How to install:
-Open the `teleporty-1.1.0-fx.xpi` file I guess? 🤷
+Open the `teleporty-1.2.0-fx.xpi` file I guess? 🤷
 
 ### Limitations:
 Works best for one playing tab. I haven't checked for two, but if you have two tabs playing concurrently, you're a maniac and you should get checked.
