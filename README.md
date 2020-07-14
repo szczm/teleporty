@@ -15,6 +15,11 @@ Open the `teleporty-1.1.0-fx.xpi` file I guess? 🤷
 Works best for one playing tab. I haven't checked for two, but if you have two tabs playing concurrently, you're a maniac and you should get checked.
 
 ### Changelog
+#### 1.2.0:
+ - Improved UX:
+   - after closing the current audible tab in a window, the new/currently selected tab is chosen as the new "anchor" ⚓
+   - "last tabs" are kept per window, which allows always returning to the previous tab in each window
+   - after a tab stops being audible, a new audible tab is assigned, if one exists
 #### 1.1.0:
 - Added "return to previous tab" functionality
 - Improved UX
