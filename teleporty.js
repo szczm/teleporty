@@ -1,24 +1,34 @@
 let audibleTab = null;
-let lastTabId = null;
+let lastTabIds = {};
 
-async function findFirstAudibleTab() {
+const AUDIBLE_TAB_NOT_FOUND = new Object;
+
+async function findFirstAudibleTab(excludeTabId = null) {
   let tabs = await browser.tabs.query({
     audible: true,
     // currentWindow: true
   });
 
+  if (excludeTabId != null) {
+    tabs = tabs.filter(tab => tab.id != excludeTabId);
+  }
+
   if (tabs.length > 0) {
     return tabs[0];
   }
+
+  return AUDIBLE_TAB_NOT_FOUND;
 }
 
 async function isAudibleTabActive() {
   if (audibleTab == null) {
-    audibleTab = await findFirstAudibleTab();
+    let newAudibleTab = await findFirstAudibleTab();
 
-    if (audibleTab == null) {
-      return;
+    if (newAudibleTab == AUDIBLE_TAB_NOT_FOUND) {
+      return false;
     }
+
+    audibleTab = newAudibleTab;
   }
 
   let tabs = await browser.tabs.query({ active: true });
@@ -28,19 +38,21 @@ async function isAudibleTabActive() {
 
 async function teleport(tab) {
   if (audibleTab == null) {
-    audibleTab = await findFirstAudibleTab();
+    let newAudibleTab = await findFirstAudibleTab();
 
-    if (audibleTab == null) {
-      return;
+    if (newAudibleTab != AUDIBLE_TAB_NOT_FOUND) {
+      audibleTab = newAudibleTab;
     }
   }
 
-  let targetTabId = await isAudibleTabActive() ? lastTabId : audibleTab.id;
-    
+  // Gotta refresh that data
+  let freshAudible = await browser.tabs.get(audibleTab.id);
+  let targetTabId = freshAudible.active ? lastTabIds[audibleTab.windowId] : audibleTab.id;
+
   // teleport to the audible tab
   browser.tabs.update(targetTabId, {
     active: true
-  }).catch();
+  }).catch(console.log);
 }
 
 async function updateIcon() {
@@ -69,25 +81,61 @@ function setAudibleActiveIcon() {
   });
 }
 
-function assignAudibleTab(tabId, currentInfo, tab) {
+async function assignAudibleTab(tabId, currentInfo, tab) {
   if (currentInfo.audible === true) {
     audibleTab = tab;
+    return;
+  }
+
+  if (currentInfo.audible === false) {
+    // This should probably use a stack for best UX, but I'm lazy
+    let newAudibleTab = await findFirstAudibleTab(tabId);
+
+    if (newAudibleTab != AUDIBLE_TAB_NOT_FOUND) {
+      audibleTab = newAudibleTab;
+      return;
+    }
   }
 }
 
-function assignLastTab(activeInfo) {
-  if (audibleTab && audibleTab.windowId === activeInfo.windowId) {
-    lastTabId = activeInfo.previousTabId;
-  }
+async function assignLastTab(activeInfo) {
+  // if (audibleTab && audibleTab.windowId === activeInfo.windowId) {
+    // lastTabId = activeInfo.previousTabId;
+  // }
+
+  let previousTab = await browser.tabs.get(activeInfo.previousTabId);
+
+  lastTabIds[previousTab.windowId] = activeInfo.previousTabId;
 }
 
-function checkRemovedTab(tabId) {
+async function checkRemovedTab(tabId, removeInfo) {
   if (audibleTab && audibleTab.id == tabId) {
     audibleTab = null;
+
+    // This should probably use a stack for best UX, but I'm lazy
+    let newAudibleTab = await findFirstAudibleTab();
+
+    if (newAudibleTab != AUDIBLE_TAB_NOT_FOUND) {
+      audibleTab = newAudibleTab;
+      return;
+    }
+
+    if (removeInfo.isWindowClosing === false) {
+      let tabs = await browser.tabs.query({
+        active: true,
+        windowId: removeInfo.windowId
+      });
+      
+      audibleTab = tabs[0];
+    }
   }
 
-  if (lastTabId == tabId) {
-    lastTabId = null;
+  // if (lastTabId == tabId) {
+  //   lastTabId = null;
+  // }
+
+  if (tabId == lastTabIds[removeInfo.windowId]) {
+    delete lastTabIds[removeInfo.windowId];
   }
 }
 browser.tabs.onUpdated.addListener(assignAudibleTab);
@@ -101,4 +149,3 @@ browser.tabs.onRemoved.addListener(updateIcon);
 updateIcon();
 
 browser.browserAction.onClicked.addListener(teleport);
-// browser.browserAction.onClicked.addListener(teleport);
